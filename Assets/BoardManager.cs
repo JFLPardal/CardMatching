@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,9 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField] private GameObject m_cardPrefab = null;
     [SerializeField] private uint m_numberOfPairs = 14;
-
+    [SerializeField] private AllCards cardHolder = null;
+    
+    private LinkedList<int> possibleIndexes;
     private bool m_isCardSelected = false;
     private Card m_selectedCard = null;
     private uint m_pairsRemaing = 0;
@@ -27,7 +30,7 @@ public class BoardManager : MonoBehaviour
     private void InitCards()
     {
         uint numberOfCards = m_numberOfPairs * 2;
-        for(uint i = 0; i < numberOfCards; i++)
+        for (uint i = 0; i < numberOfCards; i++)
             Instantiate(m_cardPrefab, transform);
     }
 
