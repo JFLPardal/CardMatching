@@ -92,7 +92,7 @@ public class BoardManager : MonoBehaviour
 
     private bool GameIsOver()
     {
-        return (--m_pairsRemaing == 0) ? true : false;
+        return --m_pairsRemaing == 0;
     }
     private bool SelectedCardsArePair(in Card secondCardSelected)
     {

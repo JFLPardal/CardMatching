@@ -1,6 +1,11 @@
 ﻿
 static class Constants
 {
+    // scene
+    public const int LOGIN_SCENE = 0; 
+    public const int MAIN_MENU_SCENE = 1; 
+    public const int CARD_MATCHING_SCENE = 2; 
+    
     // game management
     public const uint NUMBER_OF_REPEATED_CARDS = 2;
     
@@ -15,6 +20,9 @@ static class Constants
     
     // leaderboard
     public const int MAX_ENTRIES = 10;
+    
+    // persistent data
+    public const string NICKNAME_STRING = "UserNickname";
 }
 
 

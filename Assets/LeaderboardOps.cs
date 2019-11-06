@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class LeaderboardOps : MonoBehaviour
 {
@@ -18,7 +14,6 @@ public class LeaderboardOps : MonoBehaviour
         FindJsonOps();
         m_leaderboard = new LeaderboardTable();
         LoadLeaderboard();
-        
         //m_leaderboard.SortLeaderboard(); // remove
         /*
         AddToLeaderboard(new LeaderboardEntry("Nemesis", 666));
@@ -36,7 +31,8 @@ public class LeaderboardOps : MonoBehaviour
         {
             if (m_leaderboard.IsHighscore(time))
             {
-                LeaderboardEntry newEntry = new LeaderboardEntry("random", (uint)Mathf.RoundToInt(time), -1); 
+                string nickname = PlayerPrefs.GetString(Constants.NICKNAME_STRING);
+                LeaderboardEntry newEntry = new LeaderboardEntry(nickname, (uint)Mathf.RoundToInt(time), -1); 
                 AddToLeaderboard(newEntry);
             }
             else
@@ -48,7 +44,8 @@ public class LeaderboardOps : MonoBehaviour
         else
         {
             // add UI message saying congrats on getting in and the score
-            LeaderboardEntry newEntry = new LeaderboardEntry("random", (uint) time, -1);
+            string nickname = PlayerPrefs.GetString(Constants.NICKNAME_STRING);
+            LeaderboardEntry newEntry = new LeaderboardEntry(nickname, (uint)Mathf.RoundToInt(time), -1);
             AddToLeaderboard(newEntry);
         }
     }
@@ -77,10 +74,7 @@ public class LeaderboardOps : MonoBehaviour
                 m_leaderboard.DeleteLast();
             Debug.Log("more than 10");
         }
-        else
-        {
-            UpdateEntryUI(newEntry);
-        }
+        UpdateEntryUI(newEntry);
         m_saveAndLoadOps.SaveLeaderboard(m_leaderboard, c_leaderboardString);
     }
 
