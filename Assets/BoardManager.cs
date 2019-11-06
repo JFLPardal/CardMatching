@@ -11,6 +11,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private AllCards cardHolder = null;
     
     private LinkedList<int> possibleIndexes;
+    private bool m_canClick = true;
     private bool m_isCardSelected = false;
     private Card m_selectedCard = null;
     private uint m_pairsRemaing = 0;
@@ -36,39 +37,51 @@ public class BoardManager : MonoBehaviour
 
     private void CardWasClicked(Card clickedCard)
     {
-        if (!m_isCardSelected)
+        if(m_canClick)
         {
-            print("first card");
-            m_isCardSelected = true;
-            m_selectedCard = clickedCard;
-        }
-        else
-        {
-            if (ClickedCardWasAlreadySelected(clickedCard))
+            if (!m_isCardSelected)
             {
-                print("card already selected");
+                print("first card");
+                SelectCard(clickedCard);
             }
             else
             {
-                if (SelectedCardsArePair(clickedCard))
+                if (ClickedCardWasAlreadySelected(clickedCard))
                 {
-                    print("pair!");
-                    TakeCardsFromBoard(clickedCard);
-                    if (GameIsOver())
-                    {
-                        print("game over");
-                    }
+                    print("card already selected");
                 }
                 else
                 {
-                    print("cards were not pairs");
-                    // face cards down
+                    clickedCard.Flip();
+                    StartCoroutine(CheckForPairAndGameOver(clickedCard));
+                    
                 }
-                DeselectCard();
             }
         }
     }
 
+    private IEnumerator CheckForPairAndGameOver(Card clickedCard)
+    {
+        m_canClick = false;
+        yield return new WaitForSecondsRealtime(.5f);
+        if (SelectedCardsArePair(clickedCard))
+        {
+            print("pair!");
+            TakeCardsFromBoard(clickedCard);
+            if (GameIsOver())
+            {
+                print("game over");
+            }
+        }
+        else
+        {
+            print("cards were not pairs");
+            clickedCard.Flip();
+        }
+        DeselectCard();
+        m_canClick = true;
+    }
+    
     private void TakeCardsFromBoard(Card cardToTake)
     {
         cardToTake.PairWasMade();
@@ -87,11 +100,19 @@ public class BoardManager : MonoBehaviour
     {
         return secondCardSelected.GetCardID() == m_selectedCard.GetCardID();
     }
+    private void SelectCard(Card clickedCard)
+    {
+        m_selectedCard = clickedCard;
+        m_selectedCard.Flip();
+        m_isCardSelected = true;
+    }
     private void DeselectCard()
     {
-        m_isCardSelected = false;
+        m_selectedCard.Flip();
         m_selectedCard = null;
+        m_isCardSelected = false;
     }
+    
     private void OnDisable()
     {
         CardClickNotifier.OnCardClick -= CardWasClicked;
