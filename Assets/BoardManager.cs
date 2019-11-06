@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class BoardManager : MonoBehaviour
 {
+    public event Action OnGameOver = delegate {  }; 
     [SerializeField] private GameObject m_cardPrefab = null;
     [SerializeField] private uint m_numberOfPairs = 14;
     [SerializeField] private AllCards cardHolder = null;
@@ -71,6 +72,7 @@ public class BoardManager : MonoBehaviour
             if (GameIsOver())
             {
                 print("game over");
+                OnGameOver();
             }
         }
         else
