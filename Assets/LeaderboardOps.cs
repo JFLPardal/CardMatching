@@ -2,9 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LeaderboardOps : MonoBehaviour
 {
+    [SerializeField] private RectTransform m_leaderboardUI = null;
+    
     private const string c_leaderboardString = "leaderboard";
     private const string c_jsonOpsTag = "JsonOps";
     private LeaderboardTable m_leaderboard;
@@ -16,23 +19,25 @@ public class LeaderboardOps : MonoBehaviour
         m_leaderboard = new LeaderboardTable();
         LoadLeaderboard();
         
-        m_leaderboard.SortLeaderboard(); // remove
+        //m_leaderboard.SortLeaderboard(); // remove
         /*
         AddToLeaderboard(new LeaderboardEntry("Nemesis", 666));
         AddToLeaderboard( new LeaderboardEntry("Rita", 2300));
         AddToLeaderboard( new LeaderboardEntry("Miguel", 20410));*/
         
-        Debug.Log(PlayerPrefs.GetString(c_leaderboardString));
+        //Debug.Log(PlayerPrefs.GetString(c_leaderboardString));
         Clock.OnTimeCalculated += CheckIfHighscore;
     }
 
     private void CheckIfHighscore(int time)
     {
+        m_leaderboardUI.gameObject.SetActive(true);
         if (m_leaderboard.Count() > Constants.MAX_ENTRIES)
         {
             if (m_leaderboard.IsHighscore(time))
             {
-                AddToLeaderboard(new LeaderboardEntry("random", (uint) time));
+                LeaderboardEntry newEntry = new LeaderboardEntry("random", (uint)Mathf.RoundToInt(time), -1); 
+                AddToLeaderboard(newEntry);
             }
             else
             {
@@ -43,7 +48,8 @@ public class LeaderboardOps : MonoBehaviour
         else
         {
             // add UI message saying congrats on getting in and the score
-            AddToLeaderboard(new LeaderboardEntry("random", (uint) time));
+            LeaderboardEntry newEntry = new LeaderboardEntry("random", (uint) time, -1);
+            AddToLeaderboard(newEntry);
         }
     }
     private void LoadLeaderboard()
@@ -52,6 +58,14 @@ public class LeaderboardOps : MonoBehaviour
         if (m_leaderboard == null)
         {
             Debug.LogError("Leaderboard could not be retrieved");
+            return;
+        }
+        m_leaderboard.SortLeaderboard();
+       
+        foreach (var entry in m_leaderboard.Leaderboard())
+        { 
+            //AddToLeaderboard(entry);
+            UpdateEntryUI(entry);
         }
     }
     public void AddToLeaderboard(LeaderboardEntry newEntry)
@@ -63,7 +77,17 @@ public class LeaderboardOps : MonoBehaviour
                 m_leaderboard.DeleteLast();
             Debug.Log("more than 10");
         }
+        else
+        {
+            UpdateEntryUI(newEntry);
+        }
         m_saveAndLoadOps.SaveLeaderboard(m_leaderboard, c_leaderboardString);
+    }
+
+    private void UpdateEntryUI(LeaderboardEntry entryToAdd)
+    {
+        LeaderboardInfo info = new LeaderboardInfo(entryToAdd.Rank(),entryToAdd.Name(), entryToAdd.Time());
+        m_leaderboardUI.GetComponent<LeaderboarUI>().UpdateEntry(info);
     }
     private void FindJsonOps()
     {

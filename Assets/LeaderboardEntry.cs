@@ -7,16 +7,32 @@ public class LeaderboardEntry
 {
     [SerializeField] private string m_playerName;
     [SerializeField] private uint m_time;
+    [SerializeField] private int m_rank;
 
-    public LeaderboardEntry(string name, uint time)
+    public LeaderboardEntry(string name, uint time, int rank)
     {
         m_playerName = name;
         m_time = time;
+        m_rank = rank;
     }
     public uint Time()
     {
         return m_time;
-        
+    }
+
+    public string Name()
+    {
+        return m_playerName;
+    }
+
+    public int Rank()
+    {
+        return m_rank;
+    }
+
+    public void SetRank(int newRank)
+    {
+        m_rank = newRank;
     }
 }
 
@@ -33,6 +49,11 @@ public class LeaderboardTable
         SortLeaderboard();
     }
 
+    public ref List<LeaderboardEntry> Leaderboard()
+    {
+        return ref m_highscores;
+    }
+    
     public void DeleteLast()
     {
         m_highscores.RemoveAt(m_highscores.Count - 1);
@@ -46,8 +67,11 @@ public class LeaderboardTable
     public void SortLeaderboard()
     {
         m_highscores = m_highscores.OrderBy(o => o.Time()).ToList();
+        int rank = 1;
         foreach (var score in m_highscores)
         {
+            score.SetRank(rank);
+            rank++;
             Debug.Log(score.Time().ToString());
         }
     }
