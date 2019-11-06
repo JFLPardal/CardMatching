@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,14 +15,37 @@ public class LeaderboardOps : MonoBehaviour
         FindJsonOps();
         m_leaderboard = new LeaderboardTable();
         LoadLeaderboard();
+        
+        m_leaderboard.SortLeaderboard(); // remove
         /*
         AddToLeaderboard(new LeaderboardEntry("Nemesis", 666));
         AddToLeaderboard( new LeaderboardEntry("Rita", 2300));
         AddToLeaderboard( new LeaderboardEntry("Miguel", 20410));*/
         
         Debug.Log(PlayerPrefs.GetString(c_leaderboardString));
+        Clock.OnTimeCalculated += CheckIfHighscore;
     }
 
+    private void CheckIfHighscore(int time)
+    {
+        if (m_leaderboard.Count() > Constants.MAX_ENTRIES)
+        {
+            if (m_leaderboard.IsHighscore(time))
+            {
+                AddToLeaderboard(new LeaderboardEntry("random", (uint) time));
+            }
+            else
+            {
+                print("score not high enough");
+                // add UI message saying you didn't make it to the leaderboard
+            }
+        }
+        else
+        {
+            // add UI message saying congrats on getting in and the score
+            AddToLeaderboard(new LeaderboardEntry("random", (uint) time));
+        }
+    }
     private void LoadLeaderboard()
     {
         m_leaderboard = m_saveAndLoadOps.LoadString<LeaderboardTable>(c_leaderboardString);
@@ -32,7 +56,13 @@ public class LeaderboardOps : MonoBehaviour
     }
     public void AddToLeaderboard(LeaderboardEntry newEntry)
     {
-        m_leaderboard.m_highscores.Add(newEntry);
+        m_leaderboard.Add(newEntry);
+        if (m_leaderboard.Count() > Constants.MAX_ENTRIES)
+        {
+            while(m_leaderboard.Count() > Constants.MAX_ENTRIES)
+                m_leaderboard.DeleteLast();
+            Debug.Log("more than 10");
+        }
         m_saveAndLoadOps.SaveLeaderboard(m_leaderboard, c_leaderboardString);
     }
     private void FindJsonOps()
@@ -42,5 +72,10 @@ public class LeaderboardOps : MonoBehaviour
         {
             Debug.LogError("LeaderboardOps didn't find Game Object with tag " + c_jsonOpsTag);
         }
+    }
+
+    private void OnDisable()
+    {
+        Clock.OnTimeCalculated -= CheckIfHighscore;
     }
 }

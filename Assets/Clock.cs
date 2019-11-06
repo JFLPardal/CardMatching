@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;
 public class Clock : MonoBehaviour
 {
+    public static event Action<int> OnTimeCalculated = delegate {  };
+    
     [SerializeField] private BoardManager m_boardManager = null;
     
     private TextMeshProUGUI m_text = null;
@@ -40,14 +42,7 @@ public class Clock : MonoBehaviour
     {
         UpdateTimerText();
         print("finished game in: " + m_text.text);
-        SaveTimeInLeaderboard();
-        // send time to someone
+        OnTimeCalculated(Mathf.FloorToInt(m_time));
         this.enabled = false;
-    }
-
-    private void SaveTimeInLeaderboard()
-    {
-        LeaderboardEntry newEntry = new LeaderboardEntry("niceName", 433);
-        //JsonOperations.AddToLeaderBoard(newEntry);
     }
 }

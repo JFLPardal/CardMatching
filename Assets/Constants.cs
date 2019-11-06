@@ -12,6 +12,9 @@ static class Constants
     public const string MINUTES_FORMAT = "00";
     public const string DELIMITER = ":";
     public const int SECONDS = 59;
+    
+    // leaderboard
+    public const int MAX_ENTRIES = 10;
 }
 
 
