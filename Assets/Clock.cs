@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
@@ -14,6 +15,7 @@ public class Clock : MonoBehaviour
     private const string c_timeFormat = Constants.MINUTES_FORMAT;
     private const string c_timeDelimiter = Constants.DELIMITER;
     private const int c_seconds = Constants.SECONDS;
+    
     void Awake()
     {
         m_text = GetComponentInChildren<TextMeshProUGUI>();
@@ -38,7 +40,14 @@ public class Clock : MonoBehaviour
     {
         UpdateTimerText();
         print("finished game in: " + m_text.text);
+        SaveTimeInLeaderboard();
         // send time to someone
         this.enabled = false;
+    }
+
+    private void SaveTimeInLeaderboard()
+    {
+        LeaderboardEntry newEntry = new LeaderboardEntry("niceName", 433);
+        //JsonOperations.AddToLeaderBoard(newEntry);
     }
 }
