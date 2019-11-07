@@ -9,7 +9,9 @@ public class BoardManager : MonoBehaviour
     public event Action OnGameOver = delegate {  }; 
     [SerializeField] private GameObject m_cardPrefab = null;
     [SerializeField] private uint m_numberOfPairs = 14;
-    [SerializeField] private AllCards cardHolder = null;
+    [SerializeField] private RectTransform m_victoryParticles = null;
+    [SerializeField] private AudioClip m_pairSound = null;
+    [SerializeField] private AudioClip m_victorySound = null;
     
     private LinkedList<int> possibleIndexes;
     private bool m_canClick = true;
@@ -42,16 +44,11 @@ public class BoardManager : MonoBehaviour
         {
             if (!m_isCardSelected)
             {
-                print("first card");
                 SelectCard(clickedCard);
             }
             else
             {
-                if (ClickedCardWasAlreadySelected(clickedCard))
-                {
-                    print("card already selected");
-                }
-                else
+                if (!ClickedCardWasAlreadySelected(clickedCard))
                 {
                     clickedCard.Flip();
                     StartCoroutine(CheckForPairAndGameOver(clickedCard));
@@ -63,20 +60,20 @@ public class BoardManager : MonoBehaviour
     private IEnumerator CheckForPairAndGameOver(Card clickedCard)
     {
         m_canClick = false;
-        yield return new WaitForSecondsRealtime(.5f);
+        yield return new WaitForSecondsRealtime(1.1f);
         if (SelectedCardsArePair(clickedCard))
         {
-            print("pair!");
             TakeCardsFromBoard(clickedCard);
+            PlaySound.instance.Play(m_pairSound);
             if (GameIsOver())
             {
-                print("game over");
                 OnGameOver();
+                PlaySound.instance.Play(m_victorySound);
+                m_victoryParticles.gameObject.SetActive(true);
             }
         }
         else
         {
-            print("cards were not pairs");
             clickedCard.Flip();
         }
         DeselectCard();

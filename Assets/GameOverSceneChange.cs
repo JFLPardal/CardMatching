@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +13,12 @@ public class GameOverSceneChange : MonoBehaviour
     }
     private void LoadScoreboardScene()
     {
+        StartCoroutine(WaitAndLoadScene());
+    }
+
+    private IEnumerator WaitAndLoadScene()
+    {
+        yield return new WaitForSecondsRealtime(Constants.SECONDS_BEFORE_LEAVING_VICTORY_SCREEN);
         SceneManager.LoadScene(Constants.LEADERBOARD_SCENE);
     }
     private void OnDisable()

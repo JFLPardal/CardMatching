@@ -1,5 +1,4 @@
-﻿
-static class Constants
+﻿static class Constants
 {
     // scene
     public const int LOGIN_SCENE = 0; 
@@ -24,6 +23,9 @@ static class Constants
     
     // persistent data
     public const string NICKNAME_STRING = "UserNickname";
+    
+    // 
+    public const int SECONDS_BEFORE_LEAVING_VICTORY_SCREEN = 4;
 }
 
 
