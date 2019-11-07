@@ -47,7 +47,7 @@ public class PlaySound : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            CheatPersistenceProblem();
+            //CheatPersistenceProblem();
         }
         else if (instance != this)
         {

@@ -44,7 +44,6 @@ public class Card : MonoBehaviour
     }
     public void SwapImage()
     {
-        print("and yet again");
         m_image.overrideSprite = (!m_isFlippedUp) ? m_cardBackSprite : m_cardData.GetSprite();
     }
     public void PairWasMade()
