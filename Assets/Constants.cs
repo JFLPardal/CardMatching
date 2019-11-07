@@ -1,7 +1,9 @@
 ﻿static class Constants
 {
+    // player prefs
+    public const string NEW_SCORE_FLAG = "newScore"; 
+    
     // scene
-    public const int LOGIN_SCENE = 0; 
     public const int MAIN_MENU_SCENE = 1; 
     public const int CARD_MATCHING_SCENE = 2; 
     public const int LEADERBOARD_SCENE = 3; 
@@ -10,7 +12,6 @@
     public const uint NUMBER_OF_REPEATED_CARDS = 2;
     
     // card animator
-    public const string FLIP_UP = "flippedUp"; // delete
     public const string FLIP = "flipped";
     
     // clock
