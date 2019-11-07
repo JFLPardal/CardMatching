@@ -55,7 +55,6 @@ public class BoardManager : MonoBehaviour
                 {
                     clickedCard.Flip();
                     StartCoroutine(CheckForPairAndGameOver(clickedCard));
-                    
                 }
             }
         }

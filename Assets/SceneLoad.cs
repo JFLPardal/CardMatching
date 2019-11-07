@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneLoad : MonoBehaviour
@@ -12,7 +13,10 @@ public class SceneLoad : MonoBehaviour
     {
         SceneManager.LoadScene(Constants.MAIN_MENU_SCENE);
     }
-
+    public void LoadLeaderboard()
+    {
+        SceneManager.LoadScene(Constants.LEADERBOARD_SCENE);
+    }
     public void QuitGame()
     {
         Application.Quit();

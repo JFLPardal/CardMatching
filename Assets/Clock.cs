@@ -43,6 +43,8 @@ public class Clock : MonoBehaviour
         UpdateTimerText();
         print("finished game in: " + m_text.text);
         OnTimeCalculated(Mathf.RoundToInt(m_time));
+        PlayerPrefs.SetInt("lastScore",Mathf.RoundToInt(m_time) );
         this.enabled = false;
+        m_boardManager.OnGameOver -= StopClock;
     }
 }

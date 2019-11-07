@@ -21,13 +21,15 @@ public class LeaderboardOps : MonoBehaviour
         AddToLeaderboard( new LeaderboardEntry("Miguel", 20410));*/
         
         //Debug.Log(PlayerPrefs.GetString(c_leaderboardString));
-        Clock.OnTimeCalculated += CheckIfHighscore;
+        
+        //Clock.OnTimeCalculated += CheckIfHighscore;
+        CheckIfHighscore(PlayerPrefs.GetInt("lastScore"));
     }
 
     private void CheckIfHighscore(int time)
     {
         m_leaderboardUI.gameObject.SetActive(true);
-        if (m_leaderboard.Count() > Constants.MAX_ENTRIES)
+        if (m_leaderboard.Count() >= Constants.MAX_ENTRIES)
         {
             if (m_leaderboard.IsHighscore(time))
             {
